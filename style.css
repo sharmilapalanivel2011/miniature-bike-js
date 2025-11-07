@@ -71,7 +71,7 @@ body {
     position: absolute;
     font-size: 100px;
     color: white;
-    margin-left: 170px;
+    margin-left: 140px;
     margin-top: 30px;
 }
 
@@ -571,4 +571,5 @@ footer .sec-4 .icon {
 
 .footer-part .condition h6 {
     margin-top: 20px;
+
 }
