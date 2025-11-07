@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+     
+    }
+
+/* ====== NAVBAR ====== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: linear-gradient(to right, silver, white);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo i {
+  font-size: 30px;
+  color: rgb(199, 139, 28);
+}
+
+.logo h1 {
+  font-size: 30px;
+  background: linear-gradient(to right, blue, orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 18px;
+  color: darkblue;
+  transition: 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links .active {
+  color: orange;
+}
+
+/*  */
+    .cart-container {
+      background: #fff;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 100px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .cart-item img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+    }
+    .cart-details {
+      flex: 1;
+      margin-left: 20px;
+    }
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .add, .subtract {
+      background-color: #222;
+      color: #fff;
+    }
+    .remove {
+      background-color: crimson;
+      color: white;
+    }
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+   <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-motorcycle"></i>
+            <h1>Miniature Bike</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="product.html">Products</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            
+        </ul>
+    </nav>
+
+
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="total">Total: ₹<span id="total-price">0</span></div>
+  </div>
+
+  <script>
+    const cartItemsDiv = document.getElementById("cart-items");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      cartItemsDiv.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price * item.quantity;
+
+        const div = document.createElement("div");
+        div.classList.add("cart-item");
+        div.innerHTML = `
+          <img src="${item.image}" alt="">
+          <div class="cart-details">
+            <h3>${item.name}</h3>
+            <p>Price: ₹${item.price}</p>
+            <p>Qty: ${item.quantity}</p>
+          </div>
+          <div class="cart-actions">
+            <button class="add">+</button>
+            <button class="subtract">-</button>
+            <button class="remove">Remove</button>
+          </div>
+        `;
+
+        // button actions
+        div.querySelector(".add").addEventListener("click", () => {
+          item.quantity++;
+          updateCart();
+        });
+
+        div.querySelector(".subtract").addEventListener("click", () => {
+          if (item.quantity > 1) item.quantity--;
+          else cart.splice(index, 1);
+          updateCart();
+        });
+
+        div.querySelector(".remove").addEventListener("click", () => {
+          cart.splice(index, 1);
+          updateCart();
+        });
+
+        cartItemsDiv.appendChild(div);
+      });
+
+      document.getElementById("total-price").textContent = total.toFixed(2);
+    }
+
+    function updateCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
